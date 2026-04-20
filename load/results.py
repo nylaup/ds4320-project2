@@ -20,5 +20,9 @@ df = df_2016[["combined_fips", "win_2016"]].merge(
     df_2020[["county_fips", "win_2020"]],
     left_on="combined_fips", right_on="county_fips", how="inner")
 
-#calculae if flip 
+#calculate if flip 
 df["flip"] = np.where(df["win_2016"] != df["win_2020"], 1, 0)
+df = df.rename(columns={"combined_fips": "fips"})
+
+#convert dataframe to csv 
+df.to_csv("../data/county_results.csv", index=False)
