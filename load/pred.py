@@ -11,7 +11,7 @@ API_KEY = os.getenv("CENSUS_API_KEY")
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='census_data.log'
+    filename='predict.log'
 )
 logger = logging.getLogger(__name__)
 
@@ -76,7 +76,7 @@ def get_data(year):
         params = {
             "get": ",".join(chunk),
             "for": "county:*",
-            "in": "state:*",
+            "in": "state:25", #for only massachusetts
             "key": API_KEY
         }
 
@@ -124,23 +124,23 @@ def get_data(year):
 
     return df
 
-#get data for 2020 and 2016
+#get data for 2020 and 2022
 df20 = get_data(2020)
 logger.info("Successfully retrieved 2020 data")
-df16 = get_data(2016)
-logger.info("Successfully retrieved 2016 data")
+df16 = get_data(2022)
+logger.info("Successfully retrieved 2022 data")
 
-#merge 2016 and 2020 data on fips code, creating suffix for clarity 
-df = df16.merge(df20, on="fips", suffixes=("_2016", "_2020"))
-logger.info("Successfully merged 2016 and 2020 data")
+#merge 2022 and 2020 data on fips code, creating suffix for clarity 
+df = df16.merge(df20, on="fips", suffixes=("_2022", "_2020"))
+logger.info("Successfully merged 2022 and 2020 data")
 
 #create dataframe for percent changes 
 change_df = pd.DataFrame() 
 change_df["fips"] = df["fips"]
 
 for col in df.columns:
-    if col.endswith("_2016"): #demographic columns ending in 2016
-        base_col = col.replace("_2016", "")
+    if col.endswith("_2022"): #demographic columns ending in 2022
+        base_col = col.replace("_2022", "")
         col_2020 = base_col + "_2020"
         
         if col_2020 in df.columns: #demographic columns ending in 2020
@@ -156,6 +156,20 @@ logger.info("Successfully calculated percent changes")
 #drop extra columns not needed for analysis 
 change_df.drop(columns=['state_pct_change', 'county_pct_change', 'year_pct_change'], inplace=True)
 
+rename_map = { #rename columns to match with prior for model application
+    "White_pct_change": "demographics.white_pop",
+    "Total_Population_pct_change": "demographics.total_pop",
+    "Med_HH_Income_pct_change": "demographics.med_inc",
+    "Med_Rent_pct_change": "demographics.med_rent",
+    "senior_pop_pct_change": "demographics.senior_pop",
+    "hs_pop_pct_change": "demographics.hs_edu_pop",
+    "low_income_pct_change": "demographics.low_inc",
+    "high_income_pct_change": "demographics.high_inc",
+    "homeowner_pct_change": "demographics.homeowner",
+    "renter_pct_change": "demographics.renter"
+    }
+change_df = change_df.rename(columns=rename_map)
+
 #convert dataframe to csv
-change_df.to_csv("../data/census_data.csv", index=False)
-logger.info("Successfully saved census data to CSV")
+change_df.to_csv("../data/mass.csv", index=False)
+logger.info("Successfully saved massachusetts data to CSV")
