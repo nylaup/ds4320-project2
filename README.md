@@ -2,7 +2,7 @@
 This repository contains materials for a project for DS4320 Data by Design on predicting county vote margins in presidential elections. The repository contains files for getting data from election results data and the US Census, loading the data into a document database, a pipeline using a model to predict election margins, and a press release summarizing the project.     
 Name: Nyla Upal           
 NetID: mge9dn      
-DOI:    
+DOI: [![DOI](https://zenodo.org/badge/1203167035.svg)](https://doi.org/10.5281/zenodo.19843167)    
 Press Release: [Press Release File](https://github.com/nylaup/ds4320-project2/blob/main/PressRelease.md)     
 Pipeline: [Solution Pipeline](https://github.com/nylaup/ds4320-project2/blob/main/pipeline/SolutionPipeline.ipynb)      
 License: [MIT License](https://github.com/nylaup/ds4320-project2/blob/main/LICENSE)      
