@@ -41,7 +41,7 @@ I refined this specific issue to the county level as looking at it at the state 
 This project is in the domain of political science, specifically in electoral modeling. This seeks to understand why voters make the political choices that they do and how these change over time, often in response to changing social and economic conditions. Political science often dives deep into political systems and their operations and behavior in response to different forms of governance. This project applies data science to this domain by trying to predict county vote changes in an algorithmic way, drawing on demographic and electoral theory of what changes affect voting to create an effective model.         
 
 #### Background Readings
-[Folder Link](https://myuva-my.sharepoint.com/:f:/g/personal/mge9dn_virginia_edu/IgCynM8Og8HISp_4b6DqVAsuAVko1N2w9oCttap5TbbRz5Q?e=bBF7a5)         
+[Folder Link](https://myuva-my.sharepoint.com/:f:/g/personal/mge9dn_virginia_edu/IgCynM8Og8HISp_4b6DqVAsuAVko1N2w9oCttap5TbbRz5Q?e=AhjFfZ)         
 
 | Title | Description | Link |
 | :--- | :--- | :--- |
