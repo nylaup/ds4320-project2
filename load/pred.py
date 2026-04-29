@@ -124,11 +124,15 @@ def get_data(year):
 
     return df
 
-#get data for 2020 and 2022
-df20 = get_data(2020)
-logger.info("Successfully retrieved 2020 data")
-df16 = get_data(2022)
-logger.info("Successfully retrieved 2022 data")
+try: 
+    #get data for 2020 and 2022
+    df20 = get_data(2020)
+    logger.info("Successfully retrieved 2020 data")
+    df16 = get_data(2022)
+    logger.info("Successfully retrieved 2022 data")
+except Exception as e:
+    logger.error(f"Failed retrieve 2020 and 2022 data: {e}")
+    raise e
 
 #merge 2022 and 2020 data on fips code, creating suffix for clarity 
 df = df16.merge(df20, on="fips", suffixes=("_2022", "_2020"))
@@ -138,20 +142,24 @@ logger.info("Successfully merged 2022 and 2020 data")
 change_df = pd.DataFrame() 
 change_df["fips"] = df["fips"]
 
-for col in df.columns:
-    if col.endswith("_2022"): #demographic columns ending in 2022
-        base_col = col.replace("_2022", "")
-        col_2020 = base_col + "_2020"
-        
-        if col_2020 in df.columns: #demographic columns ending in 2020
-            old = df[col].astype(float)
-            new = df[col_2020].astype(float)
+try: 
+    for col in df.columns:
+        if col.endswith("_2022"): #demographic columns ending in 2022
+            base_col = col.replace("_2022", "")
+            col_2020 = base_col + "_2020"
+            
+            if col_2020 in df.columns: #demographic columns ending in 2020
+                old = df[col].astype(float)
+                new = df[col_2020].astype(float)
 
-            change = np.where( #handle divide by zero error 
-                old == 0, 0,
-                (new-old) / old) #calculate percent changes 
-            change_df[base_col + "_pct_change"] = change
-logger.info("Successfully calculated percent changes")
+                change = np.where( #handle divide by zero error 
+                    old == 0, 0,
+                    (new-old) / old) #calculate percent changes 
+                change_df[base_col + "_pct_change"] = change
+    logger.info("Successfully calculated percent changes")
+except Exception as e:
+    logger.error(f"Error calculating percent changes: {e}")
+    raise e
 
 #drop extra columns not needed for analysis 
 change_df.drop(columns=['state_pct_change', 'county_pct_change', 'year_pct_change'], inplace=True)

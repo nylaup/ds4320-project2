@@ -30,7 +30,7 @@ try:
     for _, row in merged.iterrows():
         doc = {
             "fips": row["fips"],
-            "election": {
+            "election": { 
                 "win_2016": row["win_2016"],
                 "win_2020": row["win_2020"],
                 "flip": row["flip"],
